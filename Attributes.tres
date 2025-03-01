@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://co00c7ye8x7m6"]
+
+[ext_resource type="FontFile" uid="uid://rmyb1wa46kmm" path="res://assets/PirataOne-Regular.ttf" id="1_dc8km"]
+
+[resource]
+font = ExtResource("1_dc8km")
+font_size = 25

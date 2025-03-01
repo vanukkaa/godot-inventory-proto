@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://by6x7dxadybhg"]
+
+[ext_resource type="Script" uid="uid://dt0bnqum15dxg" path="res://player/player.gd" id="1_oul6g"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kqu6x"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_oul6g")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_kqu6x")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.79653, 0.604599, 0, -0.604599, 0.79653, 0, 10, 10)

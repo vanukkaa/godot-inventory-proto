@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ylq4wv2hfnv7"]
+
+[ext_resource type="PackedScene" uid="uid://bsg523n6rmryh" path="res://inventory/inventory_grid.tscn" id="1_62wf1"]
+
+[node name="Inventory" type="Node2D"]
+
+[node name="InventoryGrid" parent="." instance=ExtResource("1_62wf1")]
+grid_line_color = Color(0.309989, 0.262649, 0.124474, 1)

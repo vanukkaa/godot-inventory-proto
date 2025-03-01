@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://cli8nppie4k0i"]
+
+[ext_resource type="Script" uid="uid://vlaxsu6getbe" path="res://inventory/item_resource.gd" id="1_kxjem"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vko0g"]
+size = Vector2(20, 20)
+
+[resource]
+script = ExtResource("1_kxjem")
+item_name = "Shield"
+icon = SubResource("PlaceholderTexture2D_vko0g")
+width = 3
+height = 3
+description = "This is a shield"
+quantity = 1
+other_stats = {}
+is_stackable = false
+max_stack_size = 1
+metadata/_custom_type_script = "uid://vlaxsu6getbe"

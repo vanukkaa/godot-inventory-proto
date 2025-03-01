@@ -1,0 +1,12 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://docst4png8hn8"]
+
+[ext_resource type="FontFile" uid="uid://cj7bu304jcr6r" path="res://assets/CONTF___.ttf" id="1_ckn6w"]
+
+[resource]
+font = ExtResource("1_ckn6w")
+font_size = 20
+outline_size = 5
+outline_color = Color(0.0430392, 0.0430392, 0.0430392, 1)
+shadow_size = 5
+shadow_color = Color(0.10748, 0.10748, 0.10748, 0)
+shadow_offset = Vector2(2, 2)

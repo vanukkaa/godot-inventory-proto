@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://83g7gl1jakvm"]
+
+[ext_resource type="PackedScene" uid="uid://by6x7dxadybhg" path="res://player/player.tscn" id="1_4qc02"]
+[ext_resource type="Script" uid="uid://cn84h0027htgd" path="res://game.gd" id="1_t8dge"]
+[ext_resource type="PackedScene" uid="uid://cvo466687f4cf" path="res://UI/character_sheet.tscn" id="2_4wuf8"]
+[ext_resource type="Script" uid="uid://dej0fhmq1q2wt" path="res://UI/gui.gd" id="3_qgarv"]
+[ext_resource type="PackedScene" uid="uid://bsg523n6rmryh" path="res://inventory/inventory_grid.tscn" id="5_qgarv"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4wuf8"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_s02eq"]
+sky_material = SubResource("ProceduralSkyMaterial_4wuf8")
+
+[sub_resource type="Environment" id="Environment_t8dge"]
+background_mode = 2
+sky = SubResource("Sky_s02eq")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eflb2"]
+albedo_color = Color(0.371046, 0.561402, 0.303756, 1)
+
+[node name="TestMap" type="Node3D"]
+script = ExtResource("1_t8dge")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_t8dge")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(300, 1, 300)
+material = SubResource("StandardMaterial3D_eflb2")
+
+[node name="Player" parent="." instance=ExtResource("1_4qc02")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="GUI" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+script = ExtResource("3_qgarv")
+
+[node name="CharacterSheet" parent="GUI" instance=ExtResource("2_4wuf8")]
+offset_left = 13.0
+offset_top = 256.0
+offset_right = -755.0
+offset_bottom = -176.0
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1219.0
+offset_top = 389.0
+offset_right = -61.0
+offset_bottom = -307.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventoryGrid" parent="GUI/PanelContainer" instance=ExtResource("5_qgarv")]
+layout_mode = 2

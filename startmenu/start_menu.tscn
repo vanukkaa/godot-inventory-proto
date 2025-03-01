@@ -1,0 +1,145 @@
+[gd_scene load_steps=10 format=3 uid="uid://caxoisyxb2xn3"]
+
+[ext_resource type="Texture2D" uid="uid://yu688ln2yudf" path="res://assets/bg.png" id="1_rygoe"]
+[ext_resource type="FontFile" uid="uid://rmyb1wa46kmm" path="res://assets/PirataOne-Regular.ttf" id="2_c8odt"]
+[ext_resource type="FontFile" uid="uid://coy3hwj3m5epf" path="res://assets/CONTFU__.ttf" id="3_ekq3y"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aieke"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 300
+border_width_top = 100
+border_width_right = 300
+border_width_bottom = 100
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2cama"]
+content_margin_left = 30.0
+content_margin_top = 100.0
+content_margin_right = 30.0
+content_margin_bottom = 100.0
+bg_color = Color(0, 0, 0, 0.757)
+border_width_left = 50
+border_width_top = 10
+border_width_right = 50
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_vcmgn"]
+font = ExtResource("2_c8odt")
+font_size = 150
+
+[sub_resource type="Gradient" id="Gradient_c7wqh"]
+colors = PackedColorArray(0.220962, 0, 0.0152207, 1, 0.513002, 0.111166, 0.0329176, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xnxmh"]
+gradient = SubResource("Gradient_c7wqh")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j23be"]
+texture = SubResource("GradientTexture2D_xnxmh")
+
+[node name="StartMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_rygoe")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_aieke")
+
+[node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(500, 800)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2cama")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_right = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="Label" type="Label" parent="Control/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Time"
+label_settings = SubResource("LabelSettings_vcmgn")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Control/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ekq3y")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxTexture_j23be")
+text = "New Game"
+
+[node name="Button2" type="Button" parent="Control/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ekq3y")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxTexture_j23be")
+text = "Load Game"
+
+[node name="Button3" type="Button" parent="Control/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ekq3y")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxTexture_j23be")
+text = "Settings"
+
+[node name="Button4" type="Button" parent="Control/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ekq3y")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxTexture_j23be")
+text = "Quit"

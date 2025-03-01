@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://ql6in0760dga"]
+
+[ext_resource type="Texture2D" uid="uid://dbal4yt8l83bs" path="res://assets/Potion_test.jpg" id="1_d824u"]
+[ext_resource type="Script" uid="uid://vlaxsu6getbe" path="res://inventory/item_resource.gd" id="1_mhy8k"]
+
+[resource]
+script = ExtResource("1_mhy8k")
+item_name = "Health Potion"
+icon = ExtResource("1_d824u")
+width = 1
+height = 1
+description = "This is a potion"
+other_stats = {}
+stackable = true
+max_stack_size = 10
+item_class = 2
+metadata/_custom_type_script = "uid://vlaxsu6getbe"
