@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://4bthox8ctnin"]
+
+[ext_resource type="Script" uid="uid://cwi342fmqng7l" path="res://inventory/dropped_item.gd" id="1_dk4f5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dk4f5"]
+
+[node name="DroppedItem" type="Node3D"]
+script = ExtResource("1_dk4f5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_dk4f5")

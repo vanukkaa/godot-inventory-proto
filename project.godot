@@ -32,6 +32,7 @@ window/stretch/aspect="expand"
 
 PlusButtons=""
 MinusButtons=""
+player=""
 
 [input]
 

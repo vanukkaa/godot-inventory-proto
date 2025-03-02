@@ -1,19 +1,20 @@
-[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://cli8nppie4k0i"]
+[gd_resource type="Resource" script_class="ItemResource" load_steps=4 format=3 uid="uid://cli8nppie4k0i"]
 
+[ext_resource type="Texture2D" uid="uid://dc5qug2d18c2d" path="res://icon.svg" id="1_1est0"]
 [ext_resource type="Script" uid="uid://vlaxsu6getbe" path="res://inventory/item_resource.gd" id="1_kxjem"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vko0g"]
-size = Vector2(20, 20)
+[sub_resource type="TorusMesh" id="TorusMesh_1est0"]
 
 [resource]
 script = ExtResource("1_kxjem")
 item_name = "Shield"
-icon = SubResource("PlaceholderTexture2D_vko0g")
+icon = ExtResource("1_1est0")
+description = "This is a shield"
+item_class = 1
+mesh = SubResource("TorusMesh_1est0")
 width = 3
 height = 3
-description = "This is a shield"
-quantity = 1
-other_stats = {}
-is_stackable = false
+stackable = false
 max_stack_size = 1
+other_stats = {}
 metadata/_custom_type_script = "uid://vlaxsu6getbe"

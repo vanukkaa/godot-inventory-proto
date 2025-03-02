@@ -1,4 +1,4 @@
-# inventory_grid.gd (SIMPLIFIED AND CORRECTED)
+# inventory_grid.gd
 @tool
 extends Control
 
@@ -38,16 +38,22 @@ var preview_item = null
 var filter_option: OptionButton
 var sort_button: Button
 var initial_items_added = false
+var dropped_item_scene = preload("res://inventory/dropped_item.tscn") # Preload DroppedItem scene
+
+# --- Initialization ---
 
 func _ready():
+	# Editor mode setup (grid lines, etc.)
 	if Engine.is_editor_hint():
 		setup_ui()
 		queue_redraw()
 		return
 
+	# If no inventory data is assigned, create a new one.
 	if inventory_data == null:
 		inventory_data = InventoryData.new()
 
+	# Create the preview item (semi-transparent, hidden initially).
 	preview_item = Control.new()
 	preview_item.modulate = Color(1.0, 1.0, 1.0, 0.5)
 	preview_item.hide()
@@ -56,8 +62,8 @@ func _ready():
 	preview_item.add_child(texture_rect)
 	add_child(preview_item)
 
-	setup_ui()
-	call_deferred("add_initial_items_and_connect")  # Add items and connect, deferred
+	setup_ui() # Sets up filter and sort buttons.
+	call_deferred("add_initial_items_and_connect")
 
 func _enter_tree():
 	if Engine.is_editor_hint():
@@ -66,14 +72,12 @@ func _enter_tree():
 func _exit_tree():
 	if Engine.is_editor_hint():
 		queue_redraw()
-
-# --- CORRECTED add_initial_items (now with signal connection) ---
+		
 func add_initial_items_and_connect():
+	# --- Example with different stats ---
 	if initial_items_added:
 		return
 	initial_items_added = true
-
-	# --- Example with different stats ---
 	var sword_resource = preload("res://resources/Sword.tres")
 	assert(sword_resource != null, "Failed to load Sword.tres")
 	if sword_resource:
@@ -102,7 +106,7 @@ func add_initial_items_and_connect():
 		add_item_at_grid_pos(potion1, Vector2i(0, 0))  # Add a stack of 5 potions
 		add_item_at_grid_pos(potion2, Vector2i(0, 0))  # Add 3 more (should stack)
 
-	# Connect AFTER items are added (and deferred)
+	# Connect signal AFTER items are added
 	inventory_data.inventory_changed.connect(update_inventory_display)
 
 func setup_ui():
@@ -133,9 +137,13 @@ func setup_ui():
 	add_child(sort_button)
 	sort_button.connect("pressed", _on_sort_pressed)
 
+# --- Drawing (Grid Lines and Background) ---
+
 func _draw():
+	# Draw the background
 	draw_rect(Rect2(0, 0, inventory_data.width * cell_size.x, inventory_data.height * cell_size.y), background_color)
 
+	# Draw the grid lines
 	for x in range(inventory_data.width + 1):
 		var start_point = Vector2(x * cell_size.x, 0)
 		var end_point = Vector2(x * cell_size.x, inventory_data.height * cell_size.y)
@@ -146,7 +154,8 @@ func _draw():
 		var end_point = Vector2(inventory_data.width * cell_size.x, y * cell_size.y)
 		draw_line(start_point, end_point, grid_line_color, grid_line_width)
 
-func add_item_at_grid_pos(item_instance: ItemInstance, grid_pos: Vector2i) -> bool:
+# --- Item Placement and Display ---
+func add_item_at_grid_pos(item_instance: ItemInstance, grid_pos: Vector2i):
 	if inventory_data.place_item(item_instance, grid_pos):
 		var item_display = preload("res://inventory/inventory_item.tscn").instantiate()
 		item_display.item_instance = item_instance
@@ -155,44 +164,70 @@ func add_item_at_grid_pos(item_instance: ItemInstance, grid_pos: Vector2i) -> bo
 		add_child(item_display)
 		item_display.global_position = global_position + (Vector2(grid_pos) * cell_size)
 		item_display.update_item()
-		return true
-	return false
 
+# Converts a global mouse position to grid coordinates.
 func get_grid_position(global_mouse_pos: Vector2) -> Vector2i:
 	var local_pos = global_mouse_pos - global_position
 	var grid_x = int(local_pos.x / cell_size.x)
 	var grid_y = int(local_pos.y / cell_size.y)
 	return Vector2i(grid_x, grid_y)
 
-# --- Simplified drop_item ---
+# --- Drag and Drop ---
+
+# Handles dropping an item into the inventory.
 func drop_item(item_display : InventoryItem):
 	var global_mouse_pos = get_global_mouse_position() # Where the mouse is NOW
-	var target_grid_pos = get_grid_position(global_mouse_pos) # The grid cell we're dropping ONTO
-	hide_preview()
+		# Check if the mouse is within the inventory grid's bounds.
+	if get_global_rect().has_point(global_mouse_pos):
+		var target_grid_pos = get_grid_position(global_mouse_pos) # The grid cell we're dropping ONTO
+		hide_preview()
 
-	var original_grid_pos = item_display.grid_position # Where the item WAS
-	var dropped_item_instance = inventory_data.remove_item_at(original_grid_pos) # Remove from original position
+		var original_grid_pos = item_display.grid_position		 # Where the item WAS
+		var dropped_item_instance = inventory_data.remove_item_at(original_grid_pos) # Remove from original
 
-	if not dropped_item_instance:
-		return  # Nothing to do if no item was removed (shouldn't happen, but good to check)
-
-	if inventory_data.can_place_item(dropped_item_instance, target_grid_pos):
-		# Try to place it at the new location (this handles stacking automatically)
-		if inventory_data.place_item(dropped_item_instance, target_grid_pos):
-			item_display.queue_free() # Remove the visual for where we picked it up
-			update_inventory_display() # Redraw (creates new visual at drop location)
+		if not dropped_item_instance:
 			return
 
-	# If we couldn't place it at the target position (not valid, or stack full), put it back:
-	inventory_data.place_item(dropped_item_instance, original_grid_pos)
-	item_display.grid_position = original_grid_pos
-	item_display.global_position = global_position + (Vector2(original_grid_pos) * cell_size)
-	item_display.update_item()
+		if inventory_data.can_place_item(dropped_item_instance, target_grid_pos):
+			# Try to place (stacking is handled within place_item)
+			if inventory_data.place_item(dropped_item_instance, target_grid_pos):
+				item_display.queue_free() # Remove the visual for where we picked it up from
+				update_inventory_display()  # Redraw to show updated inventory.
+				return
 
-# --- Simplified update_drag_preview ---
+		# If we couldn't place the item at the target (e.g., invalid position, no space),
+		# put the item *back* in its original location in the data.
+		inventory_data.place_item(dropped_item_instance, original_grid_pos)
+		item_display.grid_position = original_grid_pos
+		item_display.global_position = global_position + (Vector2(original_grid_pos) * cell_size)
+		item_display.update_item()
+	else:
+		# Outside the inventory: drop into the world.
+		drop_item_into_world(item_display.item_instance, global_mouse_pos)
+		item_display.queue_free() # Remove item display
+
+func drop_item_into_world(item_instance: ItemInstance, drop_position: Vector2):
+	# 1. Remove from InventoryData
+	var top_left = inventory_data.item_positions.get(Vector2i(item_instance.unique_id % inventory_data.width, item_instance.unique_id % inventory_data.height))
+	if top_left != null:
+		inventory_data.remove_item_at(top_left)
+
+	# 2. Instantiate DroppedItem scene
+	var dropped_item = dropped_item_scene.instantiate()
+
+	# 3. Set the item instance
+	dropped_item.set_item(item_instance)
+
+	# 4. Set the position (convert to world coordinates if necessary)
+	get_tree().get_root().add_child(dropped_item) # Add to the root for now, for simplicity
+	dropped_item.global_position = drop_position # Use global position
+
+
+# Updates the drag preview (the semi-transparent item image that follows the mouse).
 func update_drag_preview(item_resource : ItemResource, global_mouse_pos : Vector2):
 	var grid_pos = get_grid_position(global_mouse_pos)
 	var item_display = get_node_or_null(str(item_resource.get_instance_id())) as InventoryItem
+
 	# --- Calculate Drag Offset ---
 	if item_display:
 		grid_pos = Vector2i(global_mouse_pos / cell_size) - Vector2i(item_display.drag_offset)
@@ -207,12 +242,10 @@ func update_drag_preview(item_resource : ItemResource, global_mouse_pos : Vector
 	# --- Simplified Preview Logic (no temporary removal) ---
 	# Create a temporary ItemInstance for the preview check
 	var temp_instance = ItemInstance.new(item_resource)
-
 	if inventory_data.can_place_item(temp_instance, grid_pos):
 		preview_item.modulate = valid_preview_color
 	else:
 		preview_item.modulate = invalid_preview_color
-	# --- End Simplified Preview Logic ---
 
 func hide_preview():
 	preview_item.hide()
@@ -227,7 +260,7 @@ func _on_filter_selected(index: int) -> void:
 	var selected_filter = filter_option.get_item_text(index)
 	print("Filter selected: ", selected_filter)
 	for child in get_children():
-		if child is InventoryItem:  # Corrected type check
+		if child is InventoryItem:
 			if selected_filter == "All":
 				child.show()
 			elif selected_filter == "Weapons" and child.item_instance.item_resource.item_class == ItemResource.ItemClass.WEAPON:
@@ -243,7 +276,7 @@ func _on_sort_pressed() -> void:
 	print("Sort button pressed")
 	inventory_data.sort_items(func(a, b): return a.item_resource.item_name < b.item_resource.item_name)
 
-# --- NEW: Redraw the entire inventory ---
+# --- Redraw the entire inventory ---
 func update_inventory_display():
 	# Clear existing items (visually)
 	for child in get_children():
@@ -253,4 +286,11 @@ func update_inventory_display():
 	# Re-add all items from inventory_data
 	for top_left in inventory_data.items:
 		var item_instance = inventory_data.items[top_left]
-		add_item_at_grid_pos(item_instance, top_left)
+		# add_item_at_grid_pos(item_instance, top_left) # Use original
+		var item_display = preload("res://inventory/inventory_item.tscn").instantiate()
+		item_display.item_instance = item_instance
+		item_display.inventory_grid = self
+		item_display.grid_position = top_left
+		add_child(item_display)
+		item_display.global_position = global_position + (Vector2(top_left) * cell_size)
+		item_display.update_item()

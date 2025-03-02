@@ -1,19 +1,20 @@
-[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://ceopxcr84xn30"]
+[gd_resource type="Resource" script_class="ItemResource" load_steps=4 format=3 uid="uid://ceopxcr84xn30"]
 
 [ext_resource type="Script" uid="uid://vlaxsu6getbe" path="res://inventory/item_resource.gd" id="1_ba6ea"]
+[ext_resource type="Texture2D" uid="uid://dc5qug2d18c2d" path="res://icon.svg" id="1_vko0g"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vko0g"]
-size = Vector2(20, 20)
+[sub_resource type="BoxMesh" id="BoxMesh_vko0g"]
 
 [resource]
 script = ExtResource("1_ba6ea")
-item_name = "Defaulswordt Item"
-icon = SubResource("PlaceholderTexture2D_vko0g")
+item_name = "Sword"
+icon = ExtResource("1_vko0g")
+description = "Item Description"
+item_class = 0
+mesh = SubResource("BoxMesh_vko0g")
 width = 1
 height = 3
-description = "Item Description"
-other_stats = {}
 stackable = false
 max_stack_size = 1
-item_class = 2
+other_stats = {}
 metadata/_custom_type_script = "uid://vlaxsu6getbe"
